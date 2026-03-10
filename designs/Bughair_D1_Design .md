@@ -1,42 +1,47 @@
 # Deliverable D1: Design Models and Design Rationale
 
 ## 1. Introduction
-The **Fitness Management System** is designed to provide a robust foundation for managing gym memberships, class enrollments, and facility reservations. This document details the architectural decisions made for the **v1.0 release**, focusing on construction quality, automation, and long-term maintainability.
+The **Fitness Management System** is a comprehensive solution designed to automate fitness center operations, including membership management, course scheduling, personal trainer bookings, and facility reservations. This document details the architectural design for the **v1.0 release**, focusing on system integrity, security, and adherence to professional construction standards.
 
 ---
 
 ## 2. C4 Container Diagram (Level 2)
-The system is decomposed into four primary containers to ensure a clear separation of concerns, supporting both modular development and future system evolution.
+The system is decomposed into three primary containers to ensure a clear separation of concerns, supporting modular development and maintainability.
 
 ### 2.1 Container Descriptions and Responsibilities
+
 * **Web Application (React.js)**:
-    * **Responsibility**: Provides the primary interface for **Customers** to manage accounts and for **Administrators** to oversee gym operations, manage courses, and generate financial reports.
-    * **Constraint Handling**: In compliance with **Constraint 2**, administrative access is restricted to the local fitness center network to ensure data security.
-* **Mobile Application (Flutter)**:
-    * **Responsibility**: Offers on-the-go access for members to book trainers, reserve badminton courts, and view promotional content.
-    * **Privacy Feature**: Includes a **Digital Anonymous QR-Code** module for secure check-ins, protecting member identity while validating entrance through the physical gate system.
+    * **Responsibility**: Provides a unified interface for both **Customers** and **Administrators**.
+        * **Customers**: Register accounts, manage profiles, select membership plans (Free/Monthly/Yearly), enroll in training courses, book private trainers, and **reserve badminton courts (Court 1-5)**.
+        * **Administrators**: Manage customer and trainer data, publish promotions, schedule courses, and monitor facility usage statistics.
+    * **Constraint Handling**: In compliance with **Constraint 2**, administrative backend features are restricted to the local fitness center network to ensure data security.
+
 * **API Application (Node.js/Express)**:
-    * **Responsibility**: The central logic hub processing business rules, membership renewals, payment flows, and reservation conflict detection.
-    * **External Integration**: Manages secure communication with the **Payment Gateway System**, **TrueMoney Wallet API**, and the **Entrance Gate System**.
+    * **Responsibility**: The central hub for business logic and system integration.
+        * **Logic**: Processes automated membership renewals, payment flows, and real-time conflict detection for course enrollments, trainer sessions, and **badminton court reservations**.
+        * **Attendance Processing**: Receives and validates **Member ID** data transmitted from the **Entrance Gate System** to record entry and exit times.
+        * **External Integration**: Facilitates secure communication with the **Payment Gateway** (Credit Card, PayPal), **TrueMoney Wallet API**, and the **Entrance Gate System**.
+
 * **Database (MySQL)**:
-    * **Responsibility**: Acts as the persistent data store for unique member IDs, membership statuses, transaction logs, and resource availability.
-    * **Data Integrity**: Maintains ACID properties to prevent double-booking of the five badminton courts and ensures consistent financial record-keeping.
+    * **Responsibility**: The persistent data store for all system entities.
+    * **Data Integrity**: Stores relational data for Users (with unique Member IDs), Memberships, Attendance logs, Training Courses, Trainers, and Badminton Court statuses. It ensures ACID properties to prevent double-booking of resources and maintain accurate financial records.
 
 ---
 
 ## 3. Design Rationale
 
 ### 3.1 Architectural Justification
-* **Decoupled Architecture**: Separating the frontend (Web/Mobile) from the backend API allows for independent scaling and ensures that UI updates do not compromise core business stability.
-* **Centralized Security & Logic**: All validation and **Role-Based Access Control (RBAC)** are centralized in the API layer, protecting the system against common web vulnerabilities and ensuring secure integration with third-party providers.
-* **Protocol Standardization**: Communication between containers is strictly managed via **HTTPS** and **JSON**, providing a repeatable and secure way to build and release the service.
+* **Decoupled Architecture**: Separating the React frontend from the Node.js API allows for independent updates. This ensures that UI changes do not affect core business logic or database stability.
+* **Centralized Security**: All business rules, such as verifying membership validity before allowing a court reservation, are centralized in the API layer.
+* **Standardized Communication**: The system uses **HTTPS** and **JSON** for all internal container communications, following industry standards for security.
 
 ### 3.2 Support for Key Requirements
-* **Attendance Tracking**: The design supports real-time entry and exit logging by directly processing member ID data transmitted from the **Entrance Gate System**.
-* **Booking Conflict Detection**: The API and Database layers are optimized to detect and prevent schedule conflicts for both course enrollments and court reservations in real-time.
-* **24/7 Availability**: The distributed container structure ensures high system uptime and supports real-time data updates required for a continuous fitness environment.
+* **Membership & Payment**: Supports multiple tiers and diverse payment methods (Credit Card, PayPal, TrueMoney) with automated recurring billing for monthly plans.
+* **Facility & Equipment Management**: Manages the **5 badminton courts**, tracking status (Available, Booked, Maintenance) and enforcing specific reservation rules.
+* **Attendance Tracking**: Addresses the requirement for recording entry and exit by integrating with the **Entrance Keypad**, ensuring that every unique Member ID access is logged in the backend.
+* **Trainer & Course Scheduling**: Allows members to book sessions while the API's conflict-checking engine prevents overlapping schedules.
 
 ---
 
 ## 4. Relation to Future Evolution
-This foundation is built to be maintainable as requirements evolve in Phase 2. The modularity of the containers allows for future expansion, such as integrating additional fitness branches or expanding the pool of trainers without significant architectural redesign.
+The v1.0 architecture provides a stable foundation for Phase 2. The modular container approach allows for the future addition of features, such as advanced analytics or expansion to multiple gym branches, without requiring a complete system redesign.
