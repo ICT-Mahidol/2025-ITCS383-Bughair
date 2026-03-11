@@ -292,6 +292,125 @@ The **Fitness Management System** is a comprehensive solution designed to automa
 
 ---
 
+## Use case diagram
+![IMG_8590](https://github.com/user-attachments/assets/91d3398d-f502-4cc1-b404-776e9ae99563)
+
+### 1. Relationship Between Use Cases and System Requirements
+
+The use case diagram represents the functional requirements of the Fitness Management System by showing how different actors interact with the system to perform specific tasks.
+
+The primary actors identified in the system are Customer, Administrator, and Payment Provider. Each actor is associated with a set of use cases that represent the functionalities they can perform.
+
+### 2. Customer Use Cases and Related Requirements
+Register an Account: This use case satisfies the requirement that the system shall allow customers to register an account in order to access the system services. During registration, the system requires the user to provide personal information and create login credentials.
+
+Select Membership Type (<<include>>): The Select Membership Type use case is included in the registration process because customers must choose a membership plan when creating an account. This reflects the requirement that the system shall allow customers to select a membership plan during registration.
+
+Log in and Log out to the System: This use case represents the requirement that the system shall allow customers to authenticate themselves and access their accounts securely. It ensures that only registered users can access member services.
+
+Update Profile: This use case supports the requirement that the system shall allow customers to update their personal information, such as contact details or preferences.
+
+Renew / Upgrade Membership: This use case reflects the requirement that customers shall be able to renew or upgrade their membership plans. This use case includes Make Payment, indicating that payment processing is required when upgrading or renewing a membership.
+
+View Courses and Contents: This use case satisfies the requirement that customers shall be able to browse available fitness courses and related content provided by the system.
+
+Enroll in Courses: This use case supports the requirement that customers shall be able to enroll in available fitness courses.
+
+View Trainer Profiles: This use case represents the requirement that customers shall be able to view trainer information before booking sessions.
+
+Filter Trainers by Expertise (<<extend>>): The Filter Trainers by Expertise use case extends View Trainer Profiles because it provides an optional feature that helps customers narrow down trainers based on their specialization.
+
+Book Private Training Sessions: This use case satisfies the requirement that customers shall be able to schedule private training sessions with trainers.
+
+View and Reserve Courts and Time Slots: This use case represents the requirement that customers shall be able to view available badminton courts and select time slots.
+
+Reserve Badminton Courts (<<include>>): The Reserve Badminton Courts use case includes View and Reserve Courts and Time Slots, since the system must display available courts before a reservation can be made.
+
+### 3. Administrator Use Cases and Related Requirements
+
+The Administrator actor represents system staff responsible for managing system data and operations.
+
+Log in to the Backend System: This use case represents the requirement that administrators must authenticate themselves before accessing the management interface.
+
+Manage Customer Data: This use case supports the requirement that administrators shall be able to view, update, or manage customer account information.
+
+Manage Courses: This use case reflects the requirement that administrators shall be able to create, modify, or remove fitness courses offered by the system.
+
+Manage Trainers: This use case satisfies the requirement that administrators shall be able to add, update, or remove trainer profiles.
+
+Manage Trainer Schedules: This use case represents the requirement that administrators shall manage trainer availability and session schedules.
+
+Manage Badminton Courts: This use case supports the requirement that administrators shall manage badminton court information and availability schedules.
+
+Manage Contents: This use case represents the requirement that administrators shall manage course-related content or information displayed to customers.
+
+Create Financial and Membership Reports: This use case reflects the requirement that administrators shall generate reports related to membership subscriptions and financial transactions.
+
+### 4. Payment Provider Use Case
+
+Make Payment: The Payment Provider actor represents an external system responsible for processing financial transactions. This use case satisfies the requirement that the system shall integrate with an external payment service to process membership payments or other financial transactions. The payment process is included in the Renew / Upgrade Membership use case, indicating that payment is a required step when changing membership plans.
+
+### 5. How the Model Supports Key Design Decisions
+
+The use case model supports several important design decisions in the system architecture.
+
+Component Boundaries: The diagram helps identify major system components by grouping related functionalities:
+- User Management Component
+  - Register Account
+  - Login / Logout
+  - Update Profile
+  - Manage Customer Data
+- Membership and Payment Component
+  - Select Membership Type
+  - Renew / Upgrade Membership
+  - Make Payment
+- Course Management Component
+  - View Courses
+  - Enroll in Courses
+  - Manage Courses
+  - Manage Contents
+- Trainer Management Component
+  - View Trainer Profiles
+  - Book Private Training Sessions
+  - Manage Trainers
+  - Manage Trainer Schedules
+- Court Reservation Component
+  - View Courts and Time Slots
+  - Reserve Badminton Courts
+  - Manage Badminton Courts
+These groupings help define clear component boundaries in the system design.
+
+### Responsibilities
+
+Each component is responsible for specific functionality:
+- User Management handles authentication and user data.
+- Membership Management handles membership plans and upgrades.
+- Course Management handles course listings and enrollments.
+- Trainer Management handles trainer information and session bookings.
+- Court Reservation System handles scheduling and booking badminton courts.
+- Payment Service processes financial transactions.
+This separation improves maintainability and modularity.
+
+### Interactions
+
+The use case diagram also illustrates how different components interact.
+Examples include:
+- Membership renewal interacting with the payment system.
+- Course enrollment interacting with the course management module.
+- Trainer booking interacting with the trainer scheduling module.
+- Court reservation interacting with the court availability management system.
+- These interactions guide the design of API endpoints and service communication in the implementation.
+
+### 6. Design Implications for Implementation
+
+The model directly influences system implementation decisions, including:
+- Defining API endpoints such as /auth/register, /courses, /trainers, and /courts.
+- Creating separate modules or services for users, courses, trainers, payments, and court reservations.
+- Integrating an external payment provider service.
+- Implementing role-based access for customers and administrators.
+
+---
+
 ## 1. C4 Context Diagram (Level 1)
 
 <img width="1680" height="1799" alt="Context Diagram" src="https://github.com/user-attachments/assets/ecf93758-990c-4469-8e58-bdb910b9097d" />
