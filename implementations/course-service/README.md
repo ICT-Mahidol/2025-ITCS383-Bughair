@@ -1,5 +1,5 @@
 # Course & Trainer Management Service
-**Member 3 — ITCS383 Fitness Management System**
+**In Fitness Management System**
 
 ## Stack
 - **Runtime**: Node.js 18+
