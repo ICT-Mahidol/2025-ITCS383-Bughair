@@ -25,6 +25,7 @@ function initializeDatabase() {
       email TEXT UNIQUE NOT NULL,
       password TEXT NOT NULL,
       full_name TEXT NOT NULL,
+      role TEXT DEFAULT 'member',
       created_at TEXT DEFAULT (datetime('now'))
     );
 

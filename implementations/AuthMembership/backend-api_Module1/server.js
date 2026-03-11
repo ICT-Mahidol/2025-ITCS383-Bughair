@@ -43,7 +43,7 @@ app.get('/home', (req, res) => {
 
 // ✅ เพิ่มใหม่: หน้าเลือกสำหรับ Admin (admin_select.html)
 app.get('/admin-select', (req, res) => {
-    res.sendFile(path.join(__dirname, '../Frontend/admin_select.html'));
+    res.sendFile(path.join(__dirname, '../../reservation-service/frontend/admin_select.html'));
 });
 
 // หน้าจัดการสนามสำหรับ Admin (ไฟล์ของเพื่อน)
@@ -104,6 +104,8 @@ app.get('/api/reports/attendance', async (req, res) => {
 app.use('/course-service', express.static(path.join(__dirname, '../../course-service')));
 app.use('/payment-service', express.static(path.join(__dirname, '../../payment-service')));
 app.use('/reservation-service', express.static(path.join(__dirname, '../../reservation-service')));
+app.use('/Admin', express.static(path.join(__dirname, '../../Admin')));
+
 // รันเซิร์ฟเวอร์
 app.listen(PORT, () => {
     console.log(`\n=========================================`);

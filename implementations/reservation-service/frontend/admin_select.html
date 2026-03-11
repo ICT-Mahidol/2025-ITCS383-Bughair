@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FITPAY // ADMIN CONTROL</title>
+    <title>FITNESS // ADMIN CONTROL</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -25,7 +25,6 @@
             overflow: hidden;
         }
 
-        /* --- Background Glow --- */
         .bg-glow {
             position: absolute;
             width: 500px;
@@ -37,7 +36,7 @@
         .container {
             text-align: center;
             width: 100%;
-            max-width: 900px;
+            max-width: 1100px; /* ขยายความกว้างเพื่อรองรับ 3 ช่อง */
             padding: 20px;
         }
 
@@ -49,28 +48,20 @@
             text-transform: uppercase;
         }
 
-        .welcome-text span {
-            color: var(--lime);
-        }
+        .welcome-text span { color: var(--lime); }
+        .sub-text { color: #888; letter-spacing: 2px; margin-bottom: 50px; font-weight: 700; }
 
-        .sub-text {
-            color: #888;
-            letter-spacing: 2px;
-            margin-bottom: 50px;
-            font-weight: 700;
-        }
-
-        /* --- Selection Grid --- */
+        /* --- Selection Grid (3 Columns) --- */
         .admin-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            grid-template-columns: repeat(3, 1fr); /* แก้เป็น 3 ช่อง */
+            gap: 20px;
         }
 
         .admin-card {
             background: var(--glass);
             border: 1px solid var(--border);
-            padding: 60px 40px;
+            padding: 50px 30px;
             border-radius: 20px;
             text-decoration: none;
             color: #fff;
@@ -98,30 +89,24 @@
             transition: 0.4s;
         }
 
-        .admin-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .card-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-        }
-
+        .admin-card:hover::before { transform: scaleX(1); }
+        .card-icon { font-size: 3.5rem; margin-bottom: 20px; }
+        
         .admin-card h2 {
             font-family: 'Bebas Neue';
-            font-size: 2.2rem;
+            font-size: 1.8rem;
             letter-spacing: 2px;
             margin-bottom: 10px;
+            line-height: 1.1;
         }
 
         .admin-card p {
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             color: #666;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        /* --- Footer Button --- */
         .logout-btn {
             margin-top: 60px;
             background: none;
@@ -134,10 +119,7 @@
             transition: 0.3s;
         }
 
-        .logout-btn:hover {
-            color: var(--lime);
-            border-color: var(--lime);
-        }
+        .logout-btn:hover { color: var(--lime); border-color: var(--lime); }
     </style>
 </head>
 <body>
@@ -149,34 +131,39 @@
         <p class="sub-text">CHOOSE SYSTEM TO MANAGE</p>
 
         <div class="admin-grid">
-            <a href="courses_manage.html" class="admin-card">
+            <a href="/course-service/frontend/index.html" class="admin-card">
                 <div class="card-icon">🏋️‍♂️</div>
                 <h2>COURSE & TRAINER</h2>
                 <p>Manage Classes & Personal Trainers</p>
             </a>
 
-            <a href="index.html" class="admin-card">
+            <a href="/reservation-service/frontend/index.html" class="admin-card">
                 <div class="card-icon">🏸</div>
                 <h2>COURT & ATTENDANCE</h2>
                 <p>Manage Bookings & Gym Entry</p>
             </a>
+
+                <a href="/Admin/front/admin.html" class="admin-card">
+            <div class="card-icon">🏢</div>
+            <h2>ADMINISTRATOR</h2>
+            <p>Member & Promotion Management</p>
+        </a>
         </div>
 
         <button class="logout-btn" onclick="logout()">LOGOUT FROM SYSTEM</button>
     </div>
 
     <script>
-        // ป้องกันคนแอบเข้ามาหน้า Admin โดยไม่ Login
         window.onload = function() {
             const user = JSON.parse(localStorage.getItem('user'));
             if (!user || user.role !== 'admin') {
-                window.location.href = 'auth.html';
+                window.location.href = '/auth.html';
             }
         };
 
         function logout() {
             localStorage.clear();
-            window.location.href = 'auth.html';
+            window.location.href = '/auth.html';
         }
     </script>
 </body>
