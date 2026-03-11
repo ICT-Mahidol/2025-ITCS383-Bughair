@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FITNESS // ADMIN CONTROL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --lime: #c8f53c; 
+            --bg: #0a0a0a; 
+            --glass: rgba(255,255,255,0.03); 
+            --border: rgba(255,255,255,0.1); 
+        }
+        
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { 
+            background: var(--bg); 
+            color: #fff; 
+            font-family: 'Barlow', sans-serif; 
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(200,245,60,0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        .container {
+            text-align: center;
+            width: 100%;
+            max-width: 1100px; /* ขยายความกว้างเพื่อรองรับ 3 ช่อง */
+            padding: 20px;
+        }
+
+        .welcome-text {
+            font-family: 'Bebas Neue';
+            font-size: 5rem;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .welcome-text span { color: var(--lime); }
+        .sub-text { color: #888; letter-spacing: 2px; margin-bottom: 50px; font-weight: 700; }
+
+        /* --- Selection Grid (3 Columns) --- */
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* แก้เป็น 3 ช่อง */
+            gap: 20px;
+        }
+
+        .admin-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            padding: 50px 30px;
+            border-radius: 20px;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .admin-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--lime);
+            background: rgba(200,245,60,0.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .admin-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: var(--lime);
+            transform: scaleX(0);
+            transition: 0.4s;
+        }
+
+        .admin-card:hover::before { transform: scaleX(1); }
+        .card-icon { font-size: 3.5rem; margin-bottom: 20px; }
+        
+        .admin-card h2 {
+            font-family: 'Bebas Neue';
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            line-height: 1.1;
+        }
+
+        .admin-card p {
+            font-size: 0.75rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .logout-btn {
+            margin-top: 60px;
+            background: none;
+            border: 1px solid var(--border);
+            color: #555;
+            padding: 10px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        .logout-btn:hover { color: var(--lime); border-color: var(--lime); }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+
+    <div class="container">
+        <h1 class="welcome-text">WELCOME <span>ADMIN</span></h1>
+        <p class="sub-text">CHOOSE SYSTEM TO MANAGE</p>
+
+        <div class="admin-grid">
+            <a href="/course-service/frontend/index.html" class="admin-card">
+                <div class="card-icon">🏋️‍♂️</div>
+                <h2>COURSE & TRAINER</h2>
+                <p>Manage Classes & Personal Trainers</p>
+            </a>
+
+            <a href="/reservation-service/frontend/index.html" class="admin-card">
+                <div class="card-icon">🏸</div>
+                <h2>COURT & ATTENDANCE</h2>
+                <p>Manage Bookings & Gym Entry</p>
+            </a>
+
+                <a href="/Admin/front/admin.html" class="admin-card">
+            <div class="card-icon">🏢</div>
+            <h2>ADMINISTRATOR</h2>
+            <p>Member & Promotion Management</p>
+        </a>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">LOGOUT FROM SYSTEM</button>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || user.role !== 'admin') {
+                window.location.href = '/auth.html';
+            }
+        };
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = '/auth.html';
+        }
+    </script>
+</body>
+</html>

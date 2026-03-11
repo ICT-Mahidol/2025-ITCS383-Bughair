@@ -1,0 +1,154 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fitness</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --lime: #c8f53c; --bg: #0a0a0a; --glass: rgba(255,255,255,0.03); --border: rgba(255,255,255,0.1); }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background: var(--bg); color: #fff; font-family: 'Barlow', sans-serif; overflow-x: hidden; }
+
+        /* --- UI Elements --- */
+        nav { 
+            height: 80px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 0 5%; 
+            border-bottom: 1px solid var(--border); 
+            backdrop-filter: blur(20px); 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+        }
+        .logo { font-family: 'Bebas Neue'; font-size: 2.2rem; color: var(--lime); letter-spacing: 3px; text-decoration: none; }
+        
+        /* --- New Nav Links Style --- */
+        .nav-links { display: flex; gap: 35px; align-items: center; }
+        .nav-links a { 
+            text-decoration: none; 
+            color: #888; 
+            font-weight: 700; 
+            font-size: 0.85rem; 
+            letter-spacing: 1.5px; 
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--lime); }
+
+        .container { max-width: 1300px; margin: 50px auto; padding: 0 30px; }
+        .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+
+        /* --- Cards --- */
+        .card { background: var(--glass); border: 1px solid var(--border); border-radius: 20px; padding: 40px; position: relative; overflow: hidden; }
+        .card::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, var(--lime), transparent); }
+        
+        .h-large { font-family: 'Bebas Neue'; font-size: 4rem; line-height: 0.9; margin-bottom: 10px; }
+        .text-lime { color: var(--lime); }
+
+        /* --- Widgets --- */
+        .stat-box { display: flex; justify-content: space-between; margin-top: 30px; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; }
+        .stat-item span { display: block; font-size: 0.8rem; color: #888; text-transform: uppercase; }
+        .stat-item strong { font-family: 'Bebas Neue'; font-size: 2rem; color: #fff; }
+
+        .btn { display: inline-block; width: 100%; padding: 18px; background: var(--lime); color: #000; text-align: center; text-decoration: none; font-weight: 900; border-radius: 10px; margin-top: 25px; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
+        .btn:hover { transform: scale(1.02); filter: brightness(1.1); box-shadow: 0 0 30px rgba(200, 245, 60, 0.3); }
+
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
+        .menu-item { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; text-decoration: none; color: #fff; border: 1px solid transparent; transition: 0.3s; }
+        .menu-item:hover { border-color: var(--lime); background: rgba(200,245,60,0.05); }
+        .menu-item h3 { font-family: 'Bebas Neue'; font-size: 1.5rem; color: var(--lime); }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="/home" class="logo">FITNESS</a>
+        
+        <div class="nav-links">
+            <a href="/home" class="active">DASHBOARD</a>
+            <a href="/reservation-service/frontend/index.html">COURTS</a>
+            <a href="/course-service/frontend/index.html">COURSES</a>
+            <a href="/payment-service/fitness-payment-frontend.html">PAYMENTS</a>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:20px;">
+            <div style="text-align: right;">
+                <div id="uName" style="font-weight: 800; font-size: 0.9rem;">LOADING...</div>
+                <div id="uID" style="font-size: 0.7rem; color: var(--lime);">MEM-000000</div>
+            </div>
+            <button onclick="logout()" style="background:none; border:1px solid #333; color:#888; padding:8px 15px; border-radius:5px; cursor:pointer; font-size:0.7rem;">LOGOUT</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="grid">
+            <div class="main-card">
+                <div class="card">
+                    <h1 class="h-large">WELCOME TO THE <br><span class="text-lime">ELITE COMMUNITY</span></h1>
+                    <p style="color: #888; margin: 20px 0;">Your membership is currently active. Push your limits today.</p>
+                    
+                    <div class="stat-box">
+                        <div class="stat-item"><span>Current Plan</span><strong id="uPlan">PREMIUM YEARLY</strong></div>
+                        <div class="stat-item"><span>Expiry Date</span><strong id="uExpiry">DEC 2026</strong></div>
+                        <div class="stat-item"><span>Days Left</span><strong class="text-lime">248</strong></div>
+                    </div>
+
+                    <div class="menu-grid">
+                        <a href="courts.html" class="menu-item"><h3>🏸 COURT BOOKING</h3><p style="font-size:0.7rem; color:#666;">Reserve your court now.</p></a>
+                        <a href="../../course-service/frontend/index.html" class="menu-item"><h3>🏋️ FITNESS COURSES</h3><p style="font-size:0.7rem; color:#666;">Join professional training.</p></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="side-content">
+                <div class="card" style="text-align: center; margin-bottom: 20px;">
+                    <h2 style="font-family: 'Bebas Neue'; color: var(--lime);">LIVE GYM USAGE</h2>
+                    <div style="font-family: 'Bebas Neue'; font-size: 6rem; line-height: 1;">12</div>
+                    <p style="font-size: 0.8rem; color: #888;">MEMBERS CURRENTLY INSIDE</p>
+                    <a href="attendance.html" class="btn" style="padding: 12px; font-size: 0.8rem;">View Full Log</a>
+                </div>
+
+                <div class="card">
+                    <h2 style="font-family: 'Bebas Neue'; margin-bottom: 15px;">QUICK PAYMENT</h2>
+                    <p style="font-size: 0.8rem; color: #888;">Renew membership or pay court fees instantly.</p>
+                    <a href="payments.html" class="btn">GO TO WALLET</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const token = localStorage.getItem('token');
+
+            // ✅ แก้จุดกระพริบ: ใส่ / นำหน้า auth.html เพื่อให้กลับไปจุดเริ่มของ Server
+            if (!token || !user) { 
+                console.log("No session found, redirecting...");
+                window.location.href = '/auth.html'; 
+                return; 
+            }
+
+            document.getElementById('uName').innerText = user.name.toUpperCase();
+            document.getElementById('uID').innerText = user.memberId || user.id;
+
+            const planDisplay = document.getElementById('uPlan');
+            if (user.role === 'admin') {
+                planDisplay.innerText = "SYSTEM ADMIN";
+                planDisplay.style.color = "#ff4f4f";
+            } else {
+                planDisplay.innerText = "ELITE MEMBER";
+                planDisplay.style.color = "var(--lime)";
+            }
+        };
+
+        function logout() {
+            localStorage.clear();
+            // ✅ ใส่ / นำหน้าเพื่อกลับหน้า Login หลัก
+            window.location.href = '/auth.html';
+        }
+    </script>
+</body>
+</html>
