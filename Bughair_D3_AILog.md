@@ -33,6 +33,7 @@ AI tools were used as development assistants for selected tasks. All AI-generate
 |------|---------|
 | Claude (Anthropic) | Architecture design, backend logic, test generation, documentation |
 | ChatGPT (OpenAI) | Frontend UI suggestions, debugging assistance |
+|  Gemini (Google) | Code generation, bug fixing, and running/debugging assistance |
 
 ---
 
