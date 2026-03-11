@@ -18,7 +18,7 @@ db.pragma("foreign_keys = ON");
 function initializeDatabase() {
   db.exec(`
     
-    -- Member 1: User Accounts Table
+    --User Accounts Table
     CREATE TABLE IF NOT EXISTS Users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       member_id TEXT UNIQUE NOT NULL, -- e.g., MEM123456
@@ -28,7 +28,7 @@ function initializeDatabase() {
       created_at TEXT DEFAULT (datetime('now'))
     );
 
-    -- Member 1: Membership Subscriptions Table
+    --Membership Subscriptions Table
     CREATE TABLE IF NOT EXISTS Memberships (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id INTEGER NOT NULL,

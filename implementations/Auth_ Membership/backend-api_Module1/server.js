@@ -33,6 +33,10 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/welcome.html'));
 });
 
+app.get('/home', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/index.html'));
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/membership', membershipRoutes);
 app.use('/api/payments', paymentRoutes);
