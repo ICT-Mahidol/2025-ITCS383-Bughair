@@ -296,6 +296,30 @@ The **Fitness Management System** is a comprehensive solution designed to automa
 
 <img width="1680" height="1799" alt="Context Diagram" src="https://github.com/user-attachments/assets/ecf93758-990c-4469-8e58-bdb910b9097d" />
 
+### External Actors 
+
+1.1 Customer
+
+  The Customer is an external actor because the customer interacts with the system but is not part of the system itself. Customers use the Fitness Management System to register memberships, make payments, enroll in courses, reserve facilities, and access services. 
+
+1.2 Administrator
+
+  The Administrator (Fitness Staff) is an external actor because administrative users interact with the system to manage data but are not part of the system implementation. They access the backend interface to manage courses, trainers, courts, promotions, and reports. 
+
+### External Systems 
+
+2.1 Payment Gateway System
+
+  The Payment Gateway System is considered external because it is a third-party service responsible for processing credit card and PayPal payments. The Fitness Management System does not control or implement the internal payment processing logic. Instead, it sends payment requests and receives transaction confirmations. 
+
+2.2 TrueMoney Wallet API
+
+  The TrueMoney Wallet API is an external system because it is a third-party digital wallet platform that provides payment services. The fitness system integrates with TrueMoney through APIs, but it does not manage wallet balances or authentication logic internally. 
+
+2.3 Entrance Gate System
+
+  The Entrance Gate System is considered external because it is a physical hardware-based access control system. It captures member identification (via keypad, QR code, or card reader) and transmits data to the Fitness Management System for validation and attendance recording. 
+  
 ---
 
 ## 2. C4 Container Diagram (Level 2)
