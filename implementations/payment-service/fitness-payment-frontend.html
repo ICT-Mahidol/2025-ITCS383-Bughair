@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FITPAY — Fitness Payment System</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800;1,800&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0d0d0d;--bg2:#141414;--bg3:#1c1c1c;--bg4:#242424;--lime:#c8f53c;--lime2:#d9ff52;--lime-dim:rgba(200,245,60,0.10);--border:#2a2a2a;--border2:#333;--red:#ff4f4f;--green:#4fcc7a;--text:#f2f2f0;--text2:#888;--text3:#444;--r:4px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:15px;scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;min-height:100vh;overflow-x:hidden;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--bg4);}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:64px;background:rgba(13,13,13,0.95);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;color:var(--lime);cursor:pointer;}
+.nav-logo span{color:var(--text);}
+.nav-links{display:flex;gap:4px;}
+.nav-btn{background:none;border:none;color:var(--text2);font-family:'Barlow',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:8px 16px;cursor:pointer;border-radius:var(--r);transition:all .2s;}
+.nav-btn:hover{color:var(--text);background:var(--bg3);}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.uname{font-size:.8rem;font-weight:600;color:var(--text2);}
+.btn-logout{background:none;border:1px solid var(--border2);color:var(--text2);font-size:.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:6px 14px;border-radius:var(--r);cursor:pointer;transition:all .2s;}
+.btn-logout:hover{border-color:var(--red);color:var(--red);}
+.nav-cta{background:var(--lime);color:#0d0d0d;font-family:'Barlow',sans-serif;font-size:.82rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:9px 20px;border:none;border-radius:var(--r);cursor:pointer;transition:all .2s;}
+.nav-cta:hover{background:var(--lime2);}
+
+/* PAGES */
+.page{display:none;min-height:100vh;}
+.page.active{display:block;animation:pageIn .3s ease;}
+@keyframes pageIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* ══ LOGIN ══════════════════════════════════════════════════════ */
+#loginPage{display:flex;align-items:center;justify-content:center;background:var(--bg);position:relative;overflow:hidden;}
+.login-bg-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;opacity:.25;}
+.login-glow{position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(200,245,60,0.05) 0%,transparent 70%);top:50%;left:60%;transform:translate(-50%,-50%);}
+.login-card{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;max-width:860px;width:100%;margin:20px;border:1px solid var(--border);overflow:hidden;}
+.login-left{background:var(--bg3);border-right:1px solid var(--border);padding:56px 48px;display:flex;flex-direction:column;justify-content:center;}
+.login-headline{font-family:'Bebas Neue',sans-serif;font-size:3.8rem;line-height:.92;letter-spacing:2px;margin-bottom:20px;}
+.login-headline .hl{color:var(--lime);}
+.login-desc{color:var(--text2);font-size:.88rem;line-height:1.7;margin-bottom:28px;}
+.feat-list{display:flex;flex-direction:column;gap:9px;}
+.feat{display:flex;align-items:center;gap:10px;font-size:.78rem;font-weight:600;letter-spacing:.5px;color:var(--text2);}
+.feat-dot{width:6px;height:6px;background:var(--lime);flex-shrink:0;}
+.login-right{background:var(--bg2);padding:48px 40px;display:flex;flex-direction:column;justify-content:center;}
+.login-right h2{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+.login-right .hint{color:var(--text2);font-size:.82rem;margin-bottom:28px;}
+.field{margin-bottom:15px;}
+.field label{display:block;font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);margin-bottom:6px;}
+.field input,.field select{width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--text);font-family:'Barlow',sans-serif;font-size:.92rem;padding:11px 14px;border-radius:var(--r);outline:none;transition:border-color .2s;}
+.field input:focus,.field select:focus{border-color:var(--lime);}
+.field select option{background:var(--bg3);}
+.btn-primary{width:100%;background:var(--lime);color:#0d0d0d;font-family:'Barlow',sans-serif;font-size:.88rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:13px;border:none;border-radius:var(--r);cursor:pointer;transition:all .2s;margin-top:4px;}
+.btn-primary:hover{background:var(--lime2);transform:translateY(-1px);}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.btn-ghost{width:100%;background:transparent;color:var(--text);font-family:'Barlow',sans-serif;font-size:.85rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:11px;border:1px solid var(--border2);border-radius:var(--r);cursor:pointer;transition:all .2s;}
+.btn-ghost:hover{border-color:var(--lime);color:var(--lime);}
+.divider{display:flex;align-items:center;gap:12px;margin:18px 0;color:var(--text3);font-size:.72rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.demo-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.alert{padding:11px 14px;border-radius:var(--r);font-size:.82rem;font-weight:500;margin-top:10px;display:none;}
+.alert.show{display:block;}
+.alert-error{background:rgba(255,79,79,.1);border:1px solid rgba(255,79,79,.3);color:var(--red);}
+.alert-success{background:rgba(79,204,122,.1);border:1px solid rgba(79,204,122,.3);color:var(--green);}
+.alert-info{background:var(--lime-dim);border:1px solid rgba(200,245,60,.25);color:var(--lime);}
+
+/* ══ WELCOME PAGE ═══════════════════════════════════════════════ */
+#welcomePage{background:var(--bg);padding-top:64px;overflow:hidden;}
+.welcome-hero{position:relative;min-height:92vh;display:flex;align-items:center;border-bottom:1px solid var(--border);}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 70% at 80% 50%,rgba(200,245,60,0.05) 0%,transparent 65%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:70px 70px;opacity:.2;}
+.hero-content{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:80px 40px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.hero-left{}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--lime-dim);border:1px solid rgba(200,245,60,.2);color:var(--lime);font-size:.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 14px;border-radius:2px;margin-bottom:24px;}
+.hero-eyebrow::before{content:'';width:6px;height:6px;background:var(--lime);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:5.5rem;line-height:.9;letter-spacing:3px;margin-bottom:24px;}
+.hero-title .lime{color:var(--lime);}
+.hero-title .outline{-webkit-text-stroke:1px var(--text2);color:transparent;}
+.hero-desc{color:var(--text2);font-size:1rem;line-height:1.7;margin-bottom:36px;max-width:480px;}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;}
+.btn-hero{font-family:'Barlow',sans-serif;font-size:.88rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:14px 32px;border-radius:var(--r);cursor:pointer;transition:all .25s;border:none;}
+.btn-hero-primary{background:var(--lime);color:#0d0d0d;}
+.btn-hero-primary:hover{background:var(--lime2);transform:translateY(-2px);}
+.btn-hero-outline{background:transparent;color:var(--text);border:1px solid var(--border2);}
+.btn-hero-outline:hover{border-color:var(--lime);color:var(--lime);}
+.hero-right{display:flex;flex-direction:column;gap:14px;}
+.hero-stat-card{background:var(--bg2);border:1px solid var(--border);padding:22px 24px;border-radius:var(--r);display:flex;align-items:center;gap:18px;transition:all .3s;}
+.hero-stat-card:hover{border-color:var(--border2);transform:translateX(4px);}
+.hero-stat-icon{width:48px;height:48px;background:var(--lime-dim);border:1px solid rgba(200,245,60,.15);display:grid;place-items:center;font-size:1.3rem;flex-shrink:0;border-radius:var(--r);}
+.hero-stat-label{font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);margin-bottom:4px;}
+.hero-stat-val{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:1px;color:var(--text);}
+.hero-stat-val .lime{color:var(--lime);}
+
+/* TICKER */
+.ticker-wrap{background:var(--lime);overflow:hidden;height:38px;display:flex;align-items:center;}
+.ticker{display:flex;animation:ticker 28s linear infinite;white-space:nowrap;}
+.ticker-item{font-family:'Barlow Condensed',sans-serif;font-size:.88rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#0d0d0d;padding:0 28px;display:flex;align-items:center;gap:14px;}
+.ticker-item::after{content:'◆';color:rgba(0,0,0,.25);}
+@keyframes ticker{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* WELCOME PLANS SECTION */
+.welcome-plans{max-width:1200px;margin:0 auto;padding:64px 40px;}
+.sec-header{margin-bottom:36px;}
+.sec-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--lime);margin-bottom:10px;}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:2px;}
+.sec-title span{color:var(--lime);}
+.plans-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.plan-card{background:var(--bg2);border:2px solid var(--border);border-radius:var(--r);padding:30px 26px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;}
+.plan-card:hover{border-color:var(--border2);transform:translateY(-3px);}
+.plan-card.selected{border-color:var(--lime);background:rgba(200,245,60,0.06);}
+.plan-card.popular-card::after{content:'BEST VALUE';position:absolute;top:16px;right:-26px;background:var(--lime);color:#0d0d0d;font-size:.58rem;font-weight:800;letter-spacing:2px;padding:4px 30px;transform:rotate(35deg);text-transform:uppercase;}
+.plan-type-badge{display:inline-block;background:rgba(200,245,60,0.1);color:var(--lime);font-size:.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 9px;border-radius:2px;margin-bottom:14px;}
+.plan-name{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px;margin-bottom:8px;}
+.plan-price{font-family:'Bebas Neue',sans-serif;font-size:3rem;letter-spacing:1px;color:var(--lime);line-height:1;}
+.plan-price-unit{font-family:'Barlow',sans-serif;font-size:.82rem;font-weight:500;color:var(--text2);}
+.plan-desc{font-size:.8rem;color:var(--text2);margin-top:12px;line-height:1.6;}
+.plan-select-btn{margin-top:20px;width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--text2);font-family:'Barlow',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:10px;border-radius:var(--r);cursor:pointer;transition:all .2s;}
+.plan-card.selected .plan-select-btn{background:var(--lime);color:#0d0d0d;border-color:var(--lime);}
+.plan-select-btn:hover{border-color:var(--lime);color:var(--lime);}
+.plan-card.selected .plan-select-btn:hover{background:var(--lime2);}
+
+/* CTA STRIP */
+.cta-strip{background:var(--bg3);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:40px;text-align:center;}
+.cta-strip h2{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;letter-spacing:3px;margin-bottom:8px;}
+.cta-strip p{color:var(--text2);font-size:.88rem;margin-bottom:24px;}
+.cta-strip .btn-hero-primary{display:inline-block;}
+
+/* ══ DASHBOARD ═══════════════════════════════════════════════════ */
+#dashPage{background:var(--bg);padding-top:64px;}
+.dash-header{border-bottom:1px solid var(--border);}
+.dash-header-inner{max-width:1200px;margin:0 auto;padding:32px 40px 0;}
+.dash-greeting{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:3px;margin-bottom:2px;}
+.dash-greeting span{color:var(--lime);}
+.dash-sub{color:var(--text2);font-size:.83rem;margin-bottom:22px;}
+.dash-tabs{display:flex;gap:0;}
+.tab{background:none;border:none;color:var(--text2);font-family:'Barlow',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:12px 22px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;}
+.tab:hover{color:var(--text);}
+.tab.active{color:var(--lime);border-bottom-color:var(--lime);}
+.dash-body{max-width:1200px;margin:0 auto;padding:32px 40px;}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;}
+.stat-card{background:var(--bg2);border:1px solid var(--border);padding:18px 22px;border-radius:var(--r);position:relative;overflow:hidden;transition:border-color .2s;}
+.stat-card:hover{border-color:var(--border2);}
+.stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--lime);transform:scaleX(0);transition:.3s;transform-origin:left;}
+.stat-card:hover::after{transform:scaleX(1);}
+.stat-label{font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:8px;}
+.stat-value{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;letter-spacing:2px;}
+.stat-value.lime{color:var(--lime);}
+.stat-note{font-size:.72rem;color:var(--text3);margin-top:3px;}
+
+/* SECTION */
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.sec-head-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;}
+.sec-head-title span{color:var(--lime);}
+
+/* PAYMENT METHOD TABS */
+.method-tabs{display:flex;gap:8px;margin-bottom:22px;}
+.method-tab{flex:1;background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-family:'Barlow',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:12px 8px;border-radius:var(--r);cursor:pointer;transition:all .2s;text-align:center;}
+.method-tab:hover{border-color:var(--border2);color:var(--text);}
+.method-tab.active{background:var(--lime-dim);border-color:var(--lime);color:var(--lime);}
+.method-icon{font-size:1.2rem;display:block;margin-bottom:4px;}
+.pay-panel{display:none;}
+.pay-panel.active{display:block;}
+
+/* CARD VISUAL */
+.card-preview{background:linear-gradient(135deg,#1e1e1e 0%,#2c2c2c 100%);border:1px solid var(--border2);border-radius:10px;padding:24px;margin-bottom:18px;position:relative;overflow:hidden;}
+.card-preview::before{content:'';position:absolute;top:-50px;right:-50px;width:200px;height:200px;background:radial-gradient(circle,rgba(200,245,60,0.07),transparent 70%);}
+.card-chip{width:36px;height:26px;background:linear-gradient(135deg,#b8962e,#e8c97a);border-radius:4px;margin-bottom:18px;}
+.card-num{font-family:'Barlow Condensed',monospace;font-size:1.1rem;letter-spacing:4px;margin-bottom:14px;font-weight:600;}
+.card-meta{display:flex;justify-content:space-between;font-size:.68rem;color:var(--text2);text-transform:uppercase;letter-spacing:1px;}
+
+/* FIELD UTILS */
+.field-row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.field-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.test-cards{font-size:.73rem;color:var(--text3);margin-bottom:14px;}
+.test-cards span{cursor:pointer;margin-right:10px;}
+.test-cards .ok{color:var(--lime);}
+.test-cards .fail{color:var(--red);}
+
+/* PAYPAL & TMW */
+.paypal-box{background:#001435;border:1px solid #003087;border-radius:var(--r);padding:22px;text-align:center;margin-bottom:18px;}
+.paypal-logo-text{font-size:1.8rem;font-weight:800;color:#009cde;letter-spacing:-1px;}
+.paypal-logo-text span{color:#001d6c;}
+.paypal-hint{color:#5a88b8;font-size:.82rem;margin-top:6px;}
+.tmw-header{background:#1a0f00;border:1px solid #3d2200;border-radius:var(--r);padding:18px 20px;margin-bottom:18px;display:flex;align-items:center;gap:14px;}
+.tmw-icon{width:44px;height:44px;background:#ff6600;border-radius:50%;display:grid;place-items:center;font-size:1.3rem;flex-shrink:0;}
+.qr-box{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:28px;text-align:center;margin-top:14px;}
+.qr-icon{font-size:3rem;margin-bottom:12px;}
+.qr-ref-label{font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:6px;}
+.qr-ref{font-family:'Barlow Condensed',monospace;font-size:.78rem;color:var(--lime);letter-spacing:1px;word-break:break-all;margin-bottom:14px;}
+.qr-hint{font-size:.8rem;color:var(--text2);margin-bottom:18px;}
+
+/* STEP PANEL */
+.step2-panel{display:none;margin-top:14px;}
+
+/* TABLE */
+.tx-table{width:100%;border-collapse:collapse;}
+.tx-table th{text-align:left;font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);padding:10px 14px;border-bottom:1px solid var(--border);}
+.tx-table td{padding:12px 14px;border-bottom:1px solid var(--border);font-size:.84rem;vertical-align:middle;}
+.tx-table tr:last-child td{border-bottom:none;}
+.tx-table tr:hover td{background:rgba(255,255,255,.015);}
+.status-badge{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:2px;}
+.status-badge::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.status-SUCCESS{background:rgba(79,204,122,.1);color:var(--green);}
+.status-SUCCESS::before{background:var(--green);}
+.status-PENDING{background:rgba(200,245,60,.08);color:var(--lime);}
+.status-PENDING::before{background:var(--lime);}
+.status-FAILED{background:rgba(255,79,79,.1);color:var(--red);}
+.status-FAILED::before{background:var(--red);}
+.status-PROCESSING{background:rgba(100,149,237,.1);color:#6495ed;}
+.status-PROCESSING::before{background:#6495ed;}
+.status-REFUNDED{background:rgba(136,136,136,.1);color:var(--text2);}
+.status-REFUNDED::before{background:var(--text2);}
+.status-CANCELLED{background:rgba(70,70,70,.2);color:var(--text3);}
+.status-CANCELLED::before{background:var(--text3);}
+.method-badge{font-size:.68rem;font-weight:700;color:var(--text2);background:var(--bg3);padding:3px 8px;border-radius:2px;}
+.view-btn{background:none;border:1px solid var(--border);color:var(--text2);font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:var(--r);cursor:pointer;transition:all .2s;}
+.view-btn:hover{border-color:var(--lime);color:var(--lime);}
+.empty{text-align:center;padding:60px 20px;color:var(--text3);}
+.empty-icon{font-size:2.5rem;margin-bottom:10px;}
+.empty p{font-size:.85rem;}
+
+/* FILTER */
+.filter-row{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+.filter-sel{background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-family:'Barlow',sans-serif;font-size:.78rem;font-weight:600;padding:8px 12px;border-radius:var(--r);cursor:pointer;outline:none;}
+.filter-sel:focus{border-color:var(--lime);}
+.filter-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-family:'Barlow',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:8px 14px;border-radius:var(--r);cursor:pointer;transition:all .2s;}
+.filter-btn:hover{border-color:var(--lime);color:var(--lime);}
+
+/* REPORT */
+.report-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px;}
+.report-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:22px;}
+.report-card h3{font-family:'Barlow Condensed',sans-serif;font-size:.85rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:14px;}
+.report-item{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:.82rem;}
+.report-item:last-child{border-bottom:none;}
+.report-item .rval{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.95rem;color:var(--lime);}
+.date-filter{display:flex;gap:10px;margin-bottom:18px;align-items:flex-end;flex-wrap:wrap;}
+.date-filter .field{flex:1;margin-bottom:0;min-width:140px;}
+.date-filter button{background:var(--bg3);border:1px solid var(--border2);color:var(--text);font-family:'Barlow',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:10px 18px;border-radius:var(--r);cursor:pointer;white-space:nowrap;transition:all .2s;align-self:flex-end;}
+.date-filter button:hover{border-color:var(--lime);color:var(--lime);}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px);}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:30px;max-width:440px;width:100%;margin:20px;position:relative;animation:modalIn .2s ease;}
+@keyframes modalIn{from{transform:scale(.96);opacity:0;}to{transform:scale(1);opacity:1;}}
+.modal-close{position:absolute;top:12px;right:14px;background:none;border:none;color:var(--text2);font-size:1.1rem;cursor:pointer;}
+.modal-close:hover{color:var(--red);}
+.modal h2{font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+.modal-hint{color:var(--text2);font-size:.8rem;margin-bottom:18px;}
+.tx-detail-box{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:14px;}
+.tx-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:.8rem;}
+.tx-row .tk{color:var(--text2);}
+.tx-row .tv{font-weight:600;font-family:'Barlow Condensed',sans-serif;font-size:.88rem;letter-spacing:.5px;}
+
+/* SPINNER */
+.spinner{width:16px;height:16px;border:2px solid var(--bg4);border-top-color:var(--lime);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;margin-right:6px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* TOAST */
+#toast{position:fixed;bottom:22px;right:22px;z-index:9998;display:flex;flex-direction:column;gap:7px;}
+.toast-item{background:var(--bg3);border:1px solid var(--border2);color:var(--text);font-size:.8rem;font-weight:500;padding:11px 16px;border-radius:var(--r);box-shadow:0 6px 20px rgba(0,0,0,.5);animation:toastIn .3s ease;display:flex;align-items:center;gap:9px;max-width:300px;}
+.toast-item.t-success{border-left:3px solid var(--green);}
+.toast-item.t-error{border-left:3px solid var(--red);}
+.toast-item.t-info{border-left:3px solid var(--lime);}
+@keyframes toastIn{from{transform:translateX(16px);opacity:0;}to{transform:translateX(0);opacity:1;}}
+
+@media(max-width:768px){
+  nav{padding:0 16px;}
+  .login-card{grid-template-columns:1fr;}.login-left{display:none;}
+  .hero-content{grid-template-columns:1fr;}.hero-right{display:none;}
+  .plans-row{grid-template-columns:1fr;}
+  .stats-row{grid-template-columns:1fr 1fr;}
+  .dash-body,.welcome-plans{padding:20px;}
+  .report-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-logo" onclick="goHome()">FIT<span>PAY</span></div>
+  <div class="nav-links" id="navLinks" style="display:none">
+    <button class="nav-btn" onclick="goHome()">Home</button>
+    <button class="nav-btn" onclick="goDash('pay')">Pay</button>
+    <button class="nav-btn" onclick="goDash('history')">History</button>
+    <button class="nav-btn" id="adminNavBtn" style="display:none" onclick="goDash('admin')">Admin</button>
+  </div>
+  <div class="nav-right">
+    <div id="userBadge" style="display:none;align-items:center;gap:10px;display:none;">
+      <span class="uname" id="uname"></span>
+      <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+    <button class="nav-cta" id="navLoginBtn" onclick="showPage('login')">Login</button>
+  </div>
+</nav>
+
+<div id="toast"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     LOGIN PAGE
+════════════════════════════════════════════════════════════════ -->
+<div class="page active" id="loginPage" style="display:flex;align-items:center;justify-content:center;min-height:100vh;">
+  <div class="login-bg-grid"></div>
+  <div class="login-glow"></div>
+  <div class="login-card">
+    <div class="login-left">
+      <div class="login-headline">YOUR<br/><span class="hl">FITNESS</span><br/>PAYMENT<br/>PORTAL</div>
+      <p class="login-desc">Manage memberships, process payments, and track every transaction — all in one powerful platform.</p>
+      <div class="feat-list">
+        <div class="feat"><div class="feat-dot"></div>Credit Card · PayPal · True Money Wallet</div>
+        <div class="feat"><div class="feat-dot"></div>Real-time payment processing</div>
+        <div class="feat"><div class="feat-dot"></div>Full transaction history & reports</div>
+        <div class="feat"><div class="feat-dot"></div>Admin dashboard & financial analytics</div>
+      </div>
+    </div>
+    <div class="login-right">
+      <h2>Sign In</h2>
+      <p class="hint">Access your account to continue</p>
+      <div class="field"><label>Member ID</label><input id="loginId" type="text" placeholder="member_001" value="member_001"/></div>
+      <div class="field"><label>Role</label>
+        <select id="loginRole"><option value="MEMBER">Member</option><option value="ADMIN">Administrator</option></select>
+      </div>
+      <div class="field"><label>Display Name</label><input id="loginName" type="text" placeholder="Your name" value="Alice Smith"/></div>
+      <button class="btn-primary" onclick="login()">ENTER THE GYM →</button>
+      <div class="divider">quick demo</div>
+      <div class="demo-btns">
+        <button class="btn-ghost" onclick="quickLogin('member')">👤 Member Demo</button>
+        <button class="btn-ghost" onclick="quickLogin('admin')">🔧 Admin Demo</button>
+      </div>
+      <div id="loginAlert" class="alert"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     WELCOME PAGE
+════════════════════════════════════════════════════════════════ -->
+<div class="page" id="welcomePage">
+  <!-- HERO -->
+  <div class="welcome-hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-left">
+        <div class="hero-eyebrow">● System Online — Sandbox Mode</div>
+        <div class="hero-title">
+          TRAIN<br/>
+          <span class="lime">HARDER.</span><br/>
+          <span class="outline">PAY</span> SMARTER.
+        </div>
+        <p class="hero-desc">The official payment portal for your fitness membership. Choose your plan, pay securely, and get back to what matters — your workout.</p>
+        <div class="hero-actions">
+          <button class="btn-hero btn-hero-primary" onclick="goDash('pay')">START PAYMENT →</button>
+          <button class="btn-hero btn-hero-outline" onclick="goDash('history')">VIEW HISTORY</button>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-stat-card">
+          <div class="hero-stat-icon">💳</div>
+          <div><div class="hero-stat-label">Credit Card</div><div class="hero-stat-val"><span class="lime">Stripe</span> Sandbox</div></div>
+        </div>
+        <div class="hero-stat-card">
+          <div class="hero-stat-icon">🅿️</div>
+          <div><div class="hero-stat-label">PayPal</div><div class="hero-stat-val"><span class="lime">Two-step</span> Flow</div></div>
+        </div>
+        <div class="hero-stat-card">
+          <div class="hero-stat-icon">🟡</div>
+          <div><div class="hero-stat-label">True Money Wallet</div><div class="hero-stat-val"><span class="lime">QR</span> Payment</div></div>
+        </div>
+        <div class="hero-stat-card" id="memberHeroCard">
+          <div class="hero-stat-icon">👤</div>
+          <div><div class="hero-stat-label">Logged in as</div><div class="hero-stat-val" id="heroUserName">—</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <span class="ticker-item">Free Membership</span>
+      <span class="ticker-item">Monthly — 499 THB</span>
+      <span class="ticker-item">Yearly — 4,999 THB</span>
+      <span class="ticker-item">Credit Card</span>
+      <span class="ticker-item">PayPal</span>
+      <span class="ticker-item">True Money Wallet</span>
+      <span class="ticker-item">Secure Payments</span>
+      <span class="ticker-item">Free Membership</span>
+      <span class="ticker-item">Monthly — 499 THB</span>
+      <span class="ticker-item">Yearly — 4,999 THB</span>
+      <span class="ticker-item">Credit Card</span>
+      <span class="ticker-item">PayPal</span>
+      <span class="ticker-item">True Money Wallet</span>
+      <span class="ticker-item">Secure Payments</span>
+    </div>
+  </div>
+
+  <!-- PLANS PREVIEW -->
+  <div class="welcome-plans">
+    <div class="sec-header">
+      <div class="sec-eyebrow">◆ Membership Plans</div>
+      <div class="sec-title">CHOOSE YOUR <span>PLAN</span></div>
+    </div>
+    <div class="plans-row" id="welcomePlansGrid">
+      <div class="empty"><span class="spinner"></span> Loading plans...</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-strip">
+    <h2>READY TO <span style="color:var(--lime)">GET STARTED?</span></h2>
+    <p>Select a plan above and proceed to secure checkout</p>
+    <button class="btn-hero btn-hero-primary" onclick="goDash('pay')">PROCEED TO PAYMENT →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     DASHBOARD PAGE
+════════════════════════════════════════════════════════════════ -->
+<div class="page" id="dashPage">
+  <div class="dash-header">
+    <div class="dash-header-inner">
+      <div class="dash-greeting">WELCOME, <span id="dashUserName">MEMBER</span></div>
+      <div class="dash-sub" id="dashSub">Select a plan and complete your payment below</div>
+      <div class="dash-tabs">
+        <button class="tab active" id="tab-pay" onclick="switchTab('pay')">💳 Make Payment</button>
+        <button class="tab" id="tab-history" onclick="switchTab('history')">📋 My Transactions</button>
+        <button class="tab" id="tab-admin" style="display:none" onclick="switchTab('admin')">📊 Admin Panel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-body">
+
+    <!-- PAY TAB -->
+    <div id="panel-pay">
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Total Paid</div><div class="stat-value lime" id="sTotalPaid">—</div><div class="stat-note">THB lifetime</div></div>
+        <div class="stat-card"><div class="stat-label">Transactions</div><div class="stat-value" id="sTxCount">—</div><div class="stat-note">all time</div></div>
+        <div class="stat-card"><div class="stat-label">Last Payment</div><div class="stat-value" id="sLastAmt" style="font-size:1.1rem;margin-top:6px;">—</div><div class="stat-note" id="sLastMethod">—</div></div>
+        <div class="stat-card"><div class="stat-label">Account</div><div class="stat-value" id="sRole" style="font-size:1rem;margin-top:6px;">—</div><div class="stat-note">access level</div></div>
+      </div>
+
+      <div class="sec-head"><div class="sec-head-title">Choose a <span>Plan</span></div></div>
+      <div class="plans-row" id="dashPlansGrid" style="margin-bottom:28px;">
+        <div class="empty"><span class="spinner"></span> Loading...</div>
+      </div>
+
+      <div class="sec-head"><div class="sec-head-title">Payment <span>Method</span></div></div>
+      <div class="method-tabs">
+        <button class="method-tab active" id="mtab-card" onclick="switchMethod('card')"><span class="method-icon">💳</span>Credit Card</button>
+        <button class="method-tab" id="mtab-paypal" onclick="switchMethod('paypal')"><span class="method-icon">🅿️</span>PayPal</button>
+        <button class="method-tab" id="mtab-tmw" onclick="switchMethod('tmw')"><span class="method-icon">🟡</span>True Money</button>
+      </div>
+
+      <!-- CREDIT CARD -->
+      <div class="pay-panel active" id="ppanel-card">
+        <div class="card-preview">
+          <div class="card-chip"></div>
+          <div class="card-num" id="cardDisplay">•••• •••• •••• ••••</div>
+          <div class="card-meta">
+            <div><div style="font-size:.58rem;margin-bottom:2px;">CARD HOLDER</div><div id="cardHolderDisp" style="font-size:.72rem;font-weight:600;">YOUR NAME</div></div>
+            <div><div style="font-size:.58rem;margin-bottom:2px;">EXPIRES</div><div id="cardExpDisp" style="font-size:.72rem;font-weight:600;">MM/YY</div></div>
+            <div style="font-size:1.3rem;">💳</div>
+          </div>
+        </div>
+        <div class="field"><label>Card Holder Name</label><input id="cardHolder" type="text" placeholder="Alice Smith" oninput="updatePreview()"/></div>
+        <div class="field"><label>Card Number</label><input id="cardNumber" type="text" placeholder="4242 4242 4242 4242" maxlength="19" oninput="fmtCard(this);updatePreview()"/></div>
+        <div class="field-row3">
+          <div class="field"><label>Month</label><input id="expMonth" type="number" placeholder="12" min="1" max="12" oninput="updatePreview()"/></div>
+          <div class="field"><label>Year</label><input id="expYear" type="number" placeholder="2027" oninput="updatePreview()"/></div>
+          <div class="field"><label>CVV</label><input id="cvv" type="text" placeholder="123" maxlength="4"/></div>
+        </div>
+        <div class="test-cards">Test cards: <span class="ok" onclick="fillCard('4242424242424242')">4242 4242 4242 4242 ✅</span><span class="fail" onclick="fillCard('4000000000000002')">4000 0000 0000 0002 ❌</span><span class="fail" onclick="fillCard('4000000000009995')">...9995 (no funds) ❌</span></div>
+        <button class="btn-primary" id="btnCard" onclick="payCard()">CHARGE CARD →</button>
+        <div id="alertCard" class="alert"></div>
+      </div>
+
+      <!-- PAYPAL -->
+      <div class="pay-panel" id="ppanel-paypal">
+        <div class="paypal-box">
+          <div class="paypal-logo-text">Pay<span>Pal</span></div>
+          <div class="paypal-hint">Sandbox Mode — No real charges</div>
+        </div>
+        <p style="font-size:.83rem;color:var(--text2);margin-bottom:18px;line-height:1.7;">Create a PayPal order, then confirm it to simulate a complete PayPal payment flow.</p>
+        <button class="btn-primary" id="btnPaypalCreate" onclick="ppCreate()">CREATE PAYPAL ORDER →</button>
+        <div class="step2-panel" id="paypalStep2">
+          <div class="alert alert-info show" id="paypalInfo"></div>
+          <div class="field" style="margin-top:12px;"><label>Order ID</label><input id="paypalOrderId" type="text" readonly style="opacity:.6;"/></div>
+          <button class="btn-primary" id="btnPaypalCapture" onclick="ppCapture()">CONFIRM & CAPTURE →</button>
+        </div>
+        <div id="alertPaypal" class="alert"></div>
+      </div>
+
+      <!-- TRUE MONEY -->
+      <div class="pay-panel" id="ppanel-tmw">
+        <div class="tmw-header">
+          <div class="tmw-icon">🟡</div>
+          <div><div style="font-weight:700;margin-bottom:2px;">True Money Wallet</div><div style="font-size:.78rem;color:#c87a30;">Thai mobile wallet · Sandbox Mode</div></div>
+        </div>
+        <div class="field"><label>Mobile Number</label><input id="tmwMobile" type="text" placeholder="0812345678" maxlength="10"/></div>
+        <div class="test-cards">Valid Thai numbers (06x/08x/09x) ✅ &nbsp; Ending 0000 = declined ❌</div>
+        <button class="btn-primary" id="btnTmwReq" onclick="tmwRequest()">REQUEST PAYMENT →</button>
+        <div class="step2-panel" id="tmwStep2">
+          <div class="qr-box">
+            <div class="qr-icon">📱</div>
+            <div class="qr-ref-label">Transaction Reference</div>
+            <div class="qr-ref" id="tmwRef">—</div>
+            <div class="qr-hint">User approves on True Money app, then click confirm</div>
+            <button class="btn-primary" id="btnTmwConfirm" onclick="tmwConfirm()">CONFIRM PAYMENT →</button>
+          </div>
+        </div>
+        <div id="alertTmw" class="alert"></div>
+      </div>
+    </div>
+
+    <!-- HISTORY TAB -->
+    <div id="panel-history" style="display:none;">
+      <div class="filter-row">
+        <select class="filter-sel" id="fStatus" onchange="loadHistory()">
+          <option value="">All Status</option>
+          <option value="SUCCESS">Success</option>
+          <option value="PENDING">Pending</option>
+          <option value="FAILED">Failed</option>
+          <option value="REFUNDED">Refunded</option>
+          <option value="CANCELLED">Cancelled</option>
+        </select>
+        <select class="filter-sel" id="fLimit" onchange="loadHistory()">
+          <option value="10">10 per page</option>
+          <option value="20" selected>20 per page</option>
+          <option value="50">50 per page</option>
+        </select>
+        <button class="filter-btn" onclick="loadHistory()">↻ Refresh</button>
+      </div>
+      <div id="historyContainer"></div>
+    </div>
+
+    <!-- ADMIN TAB -->
+    <div id="panel-admin" style="display:none;">
+      <div class="sec-head"><div class="sec-head-title">Financial <span>Report</span></div></div>
+      <div class="date-filter">
+        <div class="field"><label>Start Date</label><input id="rStart" type="date"/></div>
+        <div class="field"><label>End Date</label><input id="rEnd" type="date"/></div>
+        <button onclick="loadReport()">GENERATE</button>
+      </div>
+      <div class="report-grid" id="reportGrid"><div class="empty" style="grid-column:1/-1"><p>Click Generate to load the report</p></div></div>
+      <div class="sec-head" style="margin-top:24px;">
+        <div class="sec-head-title">All <span>Transactions</span></div>
+        <div style="display:flex;gap:8px;">
+          <select class="filter-sel" id="aStatus" onchange="loadAdminTx()"><option value="">All Status</option><option value="SUCCESS">Success</option><option value="PENDING">Pending</option><option value="FAILED">Failed</option><option value="REFUNDED">Refunded</option></select>
+          <select class="filter-sel" id="aMethod" onchange="loadAdminTx()"><option value="">All Methods</option><option value="CREDIT_CARD">Credit Card</option><option value="PAYPAL">PayPal</option><option value="TRUEMONEY">True Money</option></select>
+        </div>
+      </div>
+      <div id="adminTxContainer"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="txModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2>Transaction <span style="color:var(--lime)">Detail</span></h2>
+    <p class="modal-hint">Full payment information</p>
+    <div id="modalContent"></div>
+    <div id="refundSec" style="display:none;">
+      <div class="field"><label>Refund Reason</label><input id="refundReason" type="text" placeholder="Enter reason for refund..."/></div>
+      <button class="btn-primary" style="background:var(--red);color:#fff;" onclick="doRefund()">ISSUE REFUND</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────────────
+const API = 'http://localhost:8080/api/payments';
+
+// ── STATE ───────────────────────────────────────────────────────
+let S = {
+  token: null, user: null,
+  plan: null,
+  ppTxId: null, ppOrderId: null,
+  tmwTxId: null, tmwRef: null,
+  currentTx: null,
+};
+
+// FALLBACK plans if API is unreachable
+const FALLBACK_PLANS = [
+  { id:'plan_free',    name:'Free Membership',    type:'FREE', billing:null,      price:0,    currency:'THB', description:'Basic access with limited features' },
+  { id:'plan_monthly', name:'Monthly Membership', type:'PAID', billing:'MONTHLY', price:499,  currency:'THB', description:'Full access, billed monthly' },
+  { id:'plan_yearly',  name:'Yearly Membership',  type:'PAID', billing:'YEARLY',  price:4999, currency:'THB', description:'Full access, billed yearly (save 17%)' },
+];
+
+// ── AUTH ────────────────────────────────────────────────────────
+function makeToken(id, role, name) {
+  return btoa(JSON.stringify({ sub:id, role, name }));
+}
+
+function login() {
+  const id   = document.getElementById('loginId').value.trim();
+  const role = document.getElementById('loginRole').value;
+  const name = document.getElementById('loginName').value.trim();
+  if (!id || !name) { showAlert('loginAlert','error','Please fill in all fields'); return; }
+  S.token = makeToken(id, role, name);
+  S.user  = { id, role, name };
+  afterLogin();
+}
+
+function quickLogin(type) {
+  if (type === 'member') S.user = { id:'member_001', role:'MEMBER', name:'Alice Smith' };
+  else                   S.user = { id:'admin_001',  role:'ADMIN',  name:'Bob Admin' };
+  S.token = makeToken(S.user.id, S.user.role, S.user.name);
+  afterLogin();
+}
+
+function afterLogin() {
+  const u = S.user;
+  // Nav
+  document.getElementById('uname').textContent = `${u.name} (${u.role})`;
+  document.getElementById('userBadge').style.display = 'flex';
+  document.getElementById('navLoginBtn').style.display = 'none';
+  document.getElementById('navLinks').style.display = 'flex';
+  if (u.role === 'ADMIN') {
+    document.getElementById('adminNavBtn').style.display = '';
+    document.getElementById('tab-admin').style.display = '';
+  }
+  // Dashboard labels
+  document.getElementById('dashUserName').textContent = u.name.toUpperCase();
+  document.getElementById('dashSub').textContent = u.role === 'ADMIN' ? 'Manage payments and generate reports' : 'Select a plan and complete your payment';
+  document.getElementById('sRole').textContent = u.role;
+  // Hero welcome card
+  document.getElementById('heroUserName').textContent = u.name.toUpperCase();
+  // Go to welcome page
+  showPage('welcome');
+  // Load data
+  loadPlans();
+  loadStats();
+  toast('success', `Welcome, ${u.name}! 🏋️`);
+}
+
+function logout() {
+  S = { token:null, user:null, plan:null, ppTxId:null, ppOrderId:null, tmwTxId:null, tmwRef:null, currentTx:null };
+  document.getElementById('userBadge').style.display = 'none';
+  document.getElementById('navLoginBtn').style.display = '';
+  document.getElementById('navLinks').style.display = 'none';
+  document.getElementById('adminNavBtn').style.display = 'none';
+  document.getElementById('tab-admin').style.display = 'none';
+  showPage('login');
+}
+
+// ── NAVIGATION ──────────────────────────────────────────────────
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => { p.classList.remove('active'); p.style.display = 'none'; });
+  const map = { login:'loginPage', welcome:'welcomePage', dash:'dashPage' };
+  const el = document.getElementById(map[name]);
+  if (el) { el.style.display = ''; setTimeout(() => el.classList.add('active'), 10); }
+}
+
+function goHome() { if (S.user) showPage('welcome'); else showPage('login'); }
+
+function goDash(tab) {
+  showPage('dash');
+  setTimeout(() => switchTab(tab), 50);
+}
+
+// ── API ─────────────────────────────────────────────────────────
+async function api(path, opts = {}) {
+  try {
+    const headers = { 'Content-Type':'application/json', ...(opts.headers||{}) };
+    if (S.token) headers['Authorization'] = `Bearer ${S.token}`;
+    const r = await fetch(API + path, { ...opts, headers });
+    const d = await r.json().catch(() => ({}));
+    return { ok: r.ok, data: d };
+  } catch(e) {
+    return { ok: false, data: { message: 'Cannot reach server. Is your backend running on port 8080?' } };
+  }
+}
+
+// ── PLANS ───────────────────────────────────────────────────────
+async function loadPlans() {
+  let plans = null;
+  try {
+    // Public endpoint — no auth needed
+    const r = await fetch(API + '/plans');
+    const d = await r.json();
+    if (r.ok && d.data?.plans?.length) plans = d.data.plans;
+  } catch(e) {}
+
+  // Fallback to hardcoded plans if API unreachable
+  if (!plans) {
+    plans = FALLBACK_PLANS;
+    toast('info', 'Using offline plan data (backend unreachable)');
+  }
+
+  renderPlans('welcomePlansGrid', plans, true);
+  renderPlans('dashPlansGrid', plans, false);
+}
+
+function renderPlans(containerId, plans, isWelcome) {
+  const grid = document.getElementById(containerId);
+  if (!grid) return;
+  grid.innerHTML = plans.map(p => {
+    const isPopular = p.id === 'plan_monthly';
+    return `
+    <div class="plan-card ${isPopular ? 'popular-card' : ''}" id="${containerId}-${p.id}" onclick="selectPlan('${p.id}','${p.name}',${p.price},'${containerId}')">
+      <div class="plan-type-badge">${p.type}${p.billing ? ' · '+p.billing : ''}</div>
+      <div class="plan-name">${p.name}</div>
+      <div class="plan-price">${p.price===0 ? 'FREE' : p.price.toLocaleString()}<span class="plan-price-unit">${p.price>0 ? ' THB' : ''}</span></div>
+      <div class="plan-desc">${p.description}</div>
+      <button class="plan-select-btn">${S.plan?.id === p.id ? '✓ SELECTED' : 'SELECT PLAN'}</button>
+    </div>`;
+  }).join('');
+}
+
+function selectPlan(id, name, price, containerId) {
+  S.plan = { id, name, price };
+  // Update all plan cards across both grids
+  ['welcomePlansGrid','dashPlansGrid'].forEach(gid => {
+    document.querySelectorAll(`#${gid} .plan-card`).forEach(c => {
+      c.classList.remove('selected');
+      const btn = c.querySelector('.plan-select-btn');
+      if (btn) btn.textContent = 'SELECT PLAN';
+    });
+    const sel = document.getElementById(`${gid}-${id}`);
+    if (sel) {
+      sel.classList.add('selected');
+      const btn = sel.querySelector('.plan-select-btn');
+      if (btn) btn.textContent = '✓ SELECTED';
+    }
+  });
+  toast('info', `Selected: ${name}${price > 0 ? ' — '+price.toLocaleString()+' THB' : ' (Free)'}`);
+}
+
+// ── STATS ───────────────────────────────────────────────────────
+async function loadStats() {
+  const { ok, data } = await api('/my?limit=100');
+  if (!ok) return;
+  const txs     = data.data?.transactions || [];
+  const success = txs.filter(t => t.status==='SUCCESS');
+  const total   = success.reduce((s,t) => s + t.amount, 0);
+  document.getElementById('sTotalPaid').textContent = total.toLocaleString();
+  document.getElementById('sTxCount').textContent   = txs.length;
+  if (success.length) {
+    document.getElementById('sLastAmt').textContent    = success[0].amount.toLocaleString() + ' THB';
+    document.getElementById('sLastMethod').textContent = success[0].payment_method;
+  }
+}
+
+// ── TAB SWITCH ──────────────────────────────────────────────────
+function switchTab(tab) {
+  ['pay','history','admin'].forEach(t => {
+    const p = document.getElementById(`panel-${t}`);
+    const b = document.getElementById(`tab-${t}`);
+    if (p) p.style.display = t===tab ? '' : 'none';
+    if (b) b.classList.toggle('active', t===tab);
+  });
+  if (tab==='history') loadHistory();
+  if (tab==='admin')   { loadAdminTx(); }
+}
+
+function switchMethod(m) {
+  ['card','paypal','tmw'].forEach(k => {
+    document.getElementById(`ppanel-${k}`).classList.toggle('active', k===m);
+    document.getElementById(`mtab-${k}`).classList.toggle('active', k===m);
+  });
+}
+
+// ── CREDIT CARD ─────────────────────────────────────────────────
+function fmtCard(el) {
+  let v = el.value.replace(/\D/g,'').slice(0,16);
+  el.value = v.replace(/(.{4})/g,'$1 ').trim();
+}
+function updatePreview() {
+  const n = document.getElementById('cardNumber').value || '•••• •••• •••• ••••';
+  const h = document.getElementById('cardHolder').value || 'YOUR NAME';
+  const m = document.getElementById('expMonth').value || 'MM';
+  const y = String(document.getElementById('expYear').value||'YYYY').slice(-2);
+  document.getElementById('cardDisplay').textContent   = n;
+  document.getElementById('cardHolderDisp').textContent = h.toUpperCase();
+  document.getElementById('cardExpDisp').textContent   = `${m}/${y}`;
+}
+function fillCard(num) {
+  document.getElementById('cardNumber').value  = num.replace(/(.{4})/g,'$1 ').trim();
+  document.getElementById('expMonth').value    = '12';
+  document.getElementById('expYear').value     = '2027';
+  document.getElementById('cvv').value         = '123';
+  document.getElementById('cardHolder').value  = S.user?.name || 'Test User';
+  updatePreview();
+}
+async function payCard() {
+  if (!S.plan) { showAlert('alertCard','error','⚠️ Please select a membership plan first'); return; }
+  if (S.plan.price === 0) { showAlert('alertCard','info','ℹ️ Free plan — no payment required'); return; }
+  const btn = document.getElementById('btnCard');
+  setLoading(btn, true, 'PROCESSING...');
+  const { ok, data } = await api('/credit-card', { method:'POST', body: JSON.stringify({
+    purpose: 'MEMBERSHIP', amount: S.plan.price, planId: S.plan.id,
+    cardDetails: {
+      cardHolderName: document.getElementById('cardHolder').value,
+      cardNumber: document.getElementById('cardNumber').value.replace(/\s/g,''),
+      expiryMonth: parseInt(document.getElementById('expMonth').value),
+      expiryYear: parseInt(document.getElementById('expYear').value),
+      cvv: document.getElementById('cvv').value,
+    }
+  })});
+  setLoading(btn, false, 'CHARGE CARD →');
+  if (ok) {
+    showAlert('alertCard','success',`✅ Payment successful! Ref: ${data.data.transaction.id.slice(0,8)}...`);
+    toast('success', `${S.plan.price.toLocaleString()} THB charged successfully!`);
+    loadStats();
+  } else {
+    showAlert('alertCard','error','❌ ' + (data.message||'Payment failed'));
+    toast('error', data.message || 'Payment failed');
+  }
+}
+
+// ── PAYPAL ──────────────────────────────────────────────────────
+async function ppCreate() {
+  if (!S.plan) { showAlert('alertPaypal','error','⚠️ Please select a plan first'); return; }
+  if (S.plan.price === 0) { showAlert('alertPaypal','info','ℹ️ Free plan — no payment required'); return; }
+  const btn = document.getElementById('btnPaypalCreate');
+  setLoading(btn, true, 'CREATING ORDER...');
+  const { ok, data } = await api('/paypal/create-order', { method:'POST', body: JSON.stringify({
+    purpose:'MEMBERSHIP', amount: S.plan.price, planId: S.plan.id
+  })});
+  setLoading(btn, false, 'CREATE PAYPAL ORDER →');
+  if (ok) {
+    S.ppTxId = data.data.transaction.id;
+    S.ppOrderId = data.data.orderId;
+    document.getElementById('paypalOrderId').value = data.data.orderId;
+    document.getElementById('paypalInfo').textContent = `✅ Order created: ${data.data.orderId}`;
+    document.getElementById('paypalStep2').style.display = '';
+    toast('info', 'PayPal order created — confirm to complete');
+  } else {
+    showAlert('alertPaypal','error','❌ ' + (data.message||'Failed'));
+  }
+}
+async function ppCapture() {
+  const btn = document.getElementById('btnPaypalCapture');
+  setLoading(btn, true, 'CAPTURING...');
+  const { ok, data } = await api('/paypal/capture-order', { method:'POST', body: JSON.stringify({
+    transactionId: S.ppTxId, orderId: S.ppOrderId
+  })});
+  setLoading(btn, false, 'CONFIRM & CAPTURE →');
+  if (ok) {
+    showAlert('alertPaypal','success','✅ PayPal payment captured successfully!');
+    document.getElementById('paypalStep2').style.display = 'none';
+    toast('success', 'PayPal payment confirmed!');
+    loadStats();
+  } else {
+    showAlert('alertPaypal','error','❌ ' + (data.message||'Capture failed'));
+  }
+}
+
+// ── TRUE MONEY ──────────────────────────────────────────────────
+async function tmwRequest() {
+  if (!S.plan) { showAlert('alertTmw','error','⚠️ Please select a plan first'); return; }
+  if (S.plan.price === 0) { showAlert('alertTmw','info','ℹ️ Free plan — no payment required'); return; }
+  const mobile = document.getElementById('tmwMobile').value.trim();
+  if (!mobile) { showAlert('alertTmw','error','⚠️ Enter your mobile number'); return; }
+  const btn = document.getElementById('btnTmwReq');
+  setLoading(btn, true, 'REQUESTING...');
+  const { ok, data } = await api('/truemoney/request', { method:'POST', body: JSON.stringify({
+    purpose:'MEMBERSHIP', amount: S.plan.price, mobileNumber: mobile, planId: S.plan.id
+  })});
+  setLoading(btn, false, 'REQUEST PAYMENT →');
+  if (ok) {
+    S.tmwTxId = data.data.transaction.id;
+    S.tmwRef  = data.data.transactionRef;
+    document.getElementById('tmwRef').textContent = data.data.transactionRef;
+    document.getElementById('tmwStep2').style.display = '';
+    toast('info', 'Request sent — confirm to complete');
+  } else {
+    showAlert('alertTmw','error','❌ ' + (data.message||'Failed'));
+  }
+}
+async function tmwConfirm() {
+  const btn = document.getElementById('btnTmwConfirm');
+  setLoading(btn, true, 'CONFIRMING...');
+  const { ok, data } = await api('/truemoney/confirm', { method:'POST', body: JSON.stringify({
+    transactionId: S.tmwTxId, transactionRef: S.tmwRef
+  })});
+  setLoading(btn, false, 'CONFIRM PAYMENT →');
+  if (ok) {
+    showAlert('alertTmw','success','✅ True Money payment confirmed!');
+    document.getElementById('tmwStep2').style.display = 'none';
+    toast('success', 'True Money payment confirmed!');
+    loadStats();
+  } else {
+    showAlert('alertTmw','error','❌ ' + (data.message||'Failed'));
+  }
+}
+
+// ── HISTORY ─────────────────────────────────────────────────────
+async function loadHistory() {
+  const status = document.getElementById('fStatus').value;
+  const limit  = document.getElementById('fLimit').value;
+  const qs = new URLSearchParams({ limit });
+  if (status) qs.set('status', status);
+  const { ok, data } = await api('/my?' + qs);
+  const c = document.getElementById('historyContainer');
+  if (!ok) { c.innerHTML = `<div class="empty"><p>${data.message||'Failed to load'}</p></div>`; return; }
+  const txs = data.data?.transactions || [];
+  if (!txs.length) { c.innerHTML = '<div class="empty"><div class="empty-icon">📭</div><p>No transactions found</p></div>'; return; }
+  c.innerHTML = `<table class="tx-table">
+    <thead><tr><th>Date</th><th>Purpose</th><th>Method</th><th>Amount</th><th>Status</th><th></th></tr></thead>
+    <tbody>${txs.map(t => `<tr>
+      <td style="color:var(--text2);font-size:.78rem;">${fmtDate(t.created_at)}</td>
+      <td style="font-weight:600;">${t.purpose}</td>
+      <td><span class="method-badge">${t.payment_method}</span></td>
+      <td style="font-family:'Barlow Condensed';font-size:1rem;font-weight:700;">${t.amount.toLocaleString()} <span style="font-size:.68rem;color:var(--text2)">THB</span></td>
+      <td><span class="status-badge status-${t.status}">${t.status}</span></td>
+      <td><button class="view-btn" onclick="openModal('${t.id}')">View</button></td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+// ── ADMIN ────────────────────────────────────────────────────────
+async function loadAdminTx() {
+  const status = document.getElementById('aStatus').value;
+  const method = document.getElementById('aMethod').value;
+  const qs = new URLSearchParams({ limit:50 });
+  if (status) qs.set('status', status);
+  if (method) qs.set('paymentMethod', method);
+  const { ok, data } = await api('/?' + qs);
+  const c = document.getElementById('adminTxContainer');
+  if (!ok) { c.innerHTML = `<div class="empty"><p>${data.message||'Failed — admin only'}</p></div>`; return; }
+  const txs = data.data?.transactions || [];
+  if (!txs.length) { c.innerHTML = '<div class="empty"><div class="empty-icon">📭</div><p>No transactions</p></div>'; return; }
+  c.innerHTML = `<table class="tx-table">
+    <thead><tr><th>Date</th><th>Member</th><th>Purpose</th><th>Method</th><th>Amount</th><th>Status</th><th></th></tr></thead>
+    <tbody>${txs.map(t => `<tr>
+      <td style="color:var(--text2);font-size:.78rem;">${fmtDate(t.created_at)}</td>
+      <td style="color:var(--lime);font-size:.8rem;">${t.member_id}</td>
+      <td style="font-weight:600;">${t.purpose}</td>
+      <td><span class="method-badge">${t.payment_method}</span></td>
+      <td style="font-family:'Barlow Condensed';font-size:1rem;font-weight:700;">${t.amount.toLocaleString()} <span style="font-size:.68rem;color:var(--text2)">THB</span></td>
+      <td><span class="status-badge status-${t.status}">${t.status}</span></td>
+      <td><button class="view-btn" onclick="openModal('${t.id}')">Manage</button></td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+async function loadReport() {
+  const start = document.getElementById('rStart').value;
+  const end   = document.getElementById('rEnd').value;
+  const qs = new URLSearchParams();
+  if (start) qs.set('startDate', start);
+  if (end)   qs.set('endDate', end);
+  const { ok, data } = await api('/admin/reports/financial?' + qs);
+  const g = document.getElementById('reportGrid');
+  if (!ok) { g.innerHTML = `<div class="empty" style="grid-column:1/-1"><p>${data.message||'Failed'}</p></div>`; return; }
+  const r = data.data?.report;
+  g.innerHTML = `
+    <div class="report-card"><h3>Overall Summary</h3>
+      ${r.total.map(t=>`<div class="report-item"><span>Revenue (${t.currency})</span><span class="rval">${t.total.toLocaleString()}</span></div><div class="report-item"><span>Transactions</span><span class="rval">${t.count}</span></div>`).join('')||'<div class="report-item"><span>No data yet</span></div>'}
+    </div>
+    <div class="report-card"><h3>By Payment Method</h3>
+      ${r.byMethod.map(m=>`<div class="report-item"><span>${m.payment_method}</span><span class="rval">${m.total.toLocaleString()} (${m.count})</span></div>`).join('')||'<div class="report-item"><span>No data</span></div>'}
+    </div>
+    <div class="report-card"><h3>By Purpose</h3>
+      ${r.byPurpose.map(p=>`<div class="report-item"><span>${p.purpose}</span><span class="rval">${p.total.toLocaleString()} (${p.count})</span></div>`).join('')||'<div class="report-item"><span>No data</span></div>'}
+    </div>
+    <div class="report-card"><h3>Last 30 Days</h3>
+      ${r.daily.slice(0,8).map(d=>`<div class="report-item"><span>${d.date}</span><span class="rval">${d.total.toLocaleString()} (${d.count})</span></div>`).join('')||'<div class="report-item"><span>No data</span></div>'}
+    </div>`;
+}
+
+// ── MODAL ────────────────────────────────────────────────────────
+async function openModal(id) {
+  const { ok, data } = await api('/' + id);
+  if (!ok) { toast('error','Could not load transaction'); return; }
+  const t = data.data?.transaction;
+  S.currentTx = t;
+  document.getElementById('modalContent').innerHTML = `
+    <div class="tx-detail-box">
+      <div class="tx-row"><span class="tk">ID</span><span class="tv" style="font-size:.7rem;">${t.id}</span></div>
+      <div class="tx-row"><span class="tk">Member</span><span class="tv">${t.member_id}</span></div>
+      <div class="tx-row"><span class="tk">Purpose</span><span class="tv">${t.purpose}</span></div>
+      <div class="tx-row"><span class="tk">Method</span><span class="tv">${t.payment_method}</span></div>
+      <div class="tx-row"><span class="tk">Amount</span><span class="tv" style="color:var(--lime)">${t.amount.toLocaleString()} ${t.currency}</span></div>
+      <div class="tx-row"><span class="tk">Status</span><span class="status-badge status-${t.status}">${t.status}</span></div>
+      <div class="tx-row"><span class="tk">Date</span><span class="tv">${fmtDate(t.created_at)}</span></div>
+      ${t.reference_id?`<div class="tx-row"><span class="tk">Gateway Ref</span><span class="tv" style="font-size:.7rem;">${t.reference_id}</span></div>`:''}
+      ${t.failure_reason?`<div class="tx-row"><span class="tk">Reason</span><span class="tv" style="color:var(--red)">${t.failure_reason}</span></div>`:''}
+    </div>`;
+  document.getElementById('refundSec').style.display = (S.user?.role==='ADMIN' && t.status==='SUCCESS') ? '' : 'none';
+  document.getElementById('txModal').classList.add('open');
+}
+
+function closeModal() { document.getElementById('txModal').classList.remove('open'); }
+
+async function doRefund() {
+  const reason = document.getElementById('refundReason').value.trim();
+  if (!reason) { toast('error','Enter a refund reason'); return; }
+  const { ok, data } = await api(`/admin/refund/${S.currentTx.id}`, { method:'POST', body: JSON.stringify({ reason }) });
+  if (ok) { toast('success','Refund issued!'); closeModal(); loadAdminTx(); }
+  else    { toast('error', data.message||'Refund failed'); }
+}
+
+document.getElementById('txModal').addEventListener('click', e => { if (e.target===document.getElementById('txModal')) closeModal(); });
+
+// ── HELPERS ──────────────────────────────────────────────────────
+function showAlert(id, type, msg) {
+  const el = document.getElementById(id);
+  el.className = `alert alert-${type} show`;
+  el.textContent = msg;
+  setTimeout(() => el.classList.remove('show'), 6000);
+}
+
+function setLoading(btn, on, text) {
+  btn.disabled = on;
+  btn.innerHTML = on ? `<span class="spinner"></span>${text}` : text;
+}
+
+function toast(type, msg) {
+  const c = document.getElementById('toast');
+  const el = document.createElement('div');
+  el.className = `toast-item t-${type}`;
+  const ic = { success:'✅', error:'❌', info:'ℹ️' };
+  el.innerHTML = `<span>${ic[type]||'•'}</span>${msg}`;
+  c.appendChild(el);
+  setTimeout(() => { el.style.animation='toastOut .3s forwards'; setTimeout(()=>el.remove(),300); }, 3500);
+}
+
+function fmtDate(s) {
+  if (!s) return '—';
+  return new Date(s).toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+}
+</script>
+</body>
+</html>
