@@ -17,8 +17,10 @@ const db = require('../src/config/db');
 const app = require('../src/index');
 const jwt = require('jsonwebtoken');
 
-const memberToken = jwt.sign({ id: 1, role: 'member' }, 'fitness_secret_key');
-const adminToken  = jwt.sign({ id: 99, role: 'admin' },  'fitness_secret_key');
+const TEST_SECRET = 'test_jwt_secret';
+
+const memberToken = jwt.sign({ id: 1, role: 'member' }, TEST_SECRET);
+const adminToken  = jwt.sign({ id: 99, role: 'admin' }, TEST_SECRET);
 
 // Helper: make db.prepare().get/all/run return mock values
 const mockPrepare = (returnVal, method = 'get') => {
