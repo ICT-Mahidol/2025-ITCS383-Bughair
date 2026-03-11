@@ -320,28 +320,26 @@ The **Fitness Management System** is a comprehensive solution designed to automa
 
   The Entrance Gate System is considered external because it is a physical hardware-based access control system. It captures member identification (via keypad, QR code, or card reader) and transmits data to the Fitness Management System for validation and attendance recording. 
   
----
-
 ## 2. C4 Container Diagram (Level 2)
 The system is decomposed into three primary containers to ensure a clear separation of concerns, supporting modular development and maintainability.
 
 ### 2.1 Container Descriptions and Responsibilities
 
-* **Web Application (React.js)**:
+* **Web Application (HTML/JS/CSS)**:
     * **Responsibility**: Provides a unified interface for both **Customers** and **Administrators**.
-        * **Customers**: Register accounts, manage profiles, select membership plans (Free/Monthly/Yearly), enroll in training courses, book private trainers, and **reserve badminton courts (Court 1-5)**.
-        * **Administrators**: Manage customer and trainer data, publish promotions, schedule courses, and monitor facility usage statistics.
+        * **Customers**: Register accounts, manage profiles, select membership plans, and **reserve badminton courts (Court 1-5)**.
+        * **Administrators**: Manage member data, monitor facility usage statistics, and view real-time court availability.
     * **Constraint Handling**: In compliance with **Constraint 2**, administrative backend features are restricted to the local fitness center network to ensure data security.
 
 * **API Application (Node.js/Express)**:
     * **Responsibility**: The central hub for business logic and system integration.
-        * **Logic**: Processes automated membership renewals, payment flows, and real-time conflict detection for course enrollments, trainer sessions, and **badminton court reservations**.
+        * **Logic**: Processes payment flows and real-time conflict detection for **badminton court reservations**.
         * **Attendance Processing**: Receives and validates **Member ID** data transmitted from the **Entrance Gate System** to record entry and exit times.
-        * **External Integration**: Facilitates secure communication with the **Payment Gateway** (Credit Card, PayPal), **TrueMoney Wallet API**, and the **Entrance Gate System**.
+        * **External Integration**: Facilitates secure communication with the **Payment Gateway** and the **Entrance Gate System**.
 
-* **Database (MySQL)**:
-    * **Responsibility**: The persistent data store for all system entities.
-    * **Data Integrity**: Stores relational data for Users (with unique Member IDs), Memberships, Attendance logs, Training Courses, Trainers, and Badminton Court statuses. It ensures ACID properties to prevent double-booking of resources and maintain accurate financial records.
+* **Database (SQLite)**:
+    * **Responsibility**: A lightweight, file-based relational data store using **better-sqlite3** for high-performance data persistence.
+    * **Data Integrity**: Stores relational data for Users, Memberships, Attendance logs, and Badminton Court statuses. It ensures ACID compliance within a local file (`fitness.db`), preventing resource double-booking and maintaining accurate, real-time logs without the overhead of a separate database server.
 
 ---
 
